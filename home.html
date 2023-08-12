@@ -1,0 +1,88 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grocery Store Dashboard</title>
+</head>
+<body>
+    <nav style="float: right;">
+        <!-- Navigation bar content -->
+        <form method="POST" action="/logout">
+            <input type="submit" value="Logout"></input></form>
+    </nav>
+    <div class="container">
+        <h1>Welcome, {{ user.username }}!</h1>
+        <!-- {{user.is_admin}} -->
+    <form method="POST" action="/search">
+        <input placeholder="Search" name="search">
+        <input type="hidden" name="uid" value={{user.user_id}}>
+        <input type="submit" value="search">
+    </form>
+    {% if is_search==True: %}
+    <p>search result</p>
+    <ul>
+    {% for l in search_list %}
+    <li>  {{l.product_name}}</li>
+    {% endfor %}
+</ul>
+                {% else %}
+     
+                {% endif %}
+       
+        <!-- Display user-specific information -->
+        <p>Your shopping lists:</p>
+        <ul>
+            {% for shopping_list in shopping_lists %}
+            <li>  
+                {% for product in products %}{% if product.product_id==shopping_list.product_id: %}
+                {{product.product_name}} {{product.rate_per_unit}}
+                {% else %}
+     
+                {% endif %}{% endfor %}
+                 {{shopping_list.quantity}} 
+                 
+        
+                    </li>
+
+            
+                
+            {% endfor %}
+        </ul>
+        
+        <!-- <p>Product categories:</p>
+        <ul>
+            {% for product in products %}
+                <li>{{ product.product_name }}</li>
+            {% endfor %}
+        </ul> -->
+
+        <!-- Form for adding a new shopping list -->
+        <span id="qwert">Value of Cart ${{total}}</span>
+        <!-- <form method="POST" action="/buy">
+            <input type="hidden" name="total" value={{total}}> -->
+            <button onclick="myFunction()">Buy</button>
+        <!-- </form> -->
+        <h2>Add a New Shopping List</h2>
+        <form method="POST" action="/add_shopping_list">
+            <p>Product categories:</p>
+            <select name="pd_id" id="lang" style="margin-bottom: 5px;">
+                {% for product in products %}
+                <option value="{{ product.product_id}}">{{ product.product_name }}</option>
+            {% endfor %}
+              </select>
+              <br>
+              <input type="number" name="quantity" placeholder="Enter quantity">
+              <input type="hidden" name="uid" value={{user.user_id}}>
+            <input type="submit" value="Add">
+        </form>
+    </div>
+    <script>
+        function myFunction() {
+          alert(document.getElementById("qwert").innerHTML);
+          confirm("Press a button!\nEither OK or Cancel.");
+        }
+        </script>
+</body>
+</html>

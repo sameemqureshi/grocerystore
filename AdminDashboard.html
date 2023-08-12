@@ -1,0 +1,102 @@
+
+<!-- home.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+</head>
+<body>
+    <nav style="float: right;">
+        <!-- <p>Admin Dashboard</p> -->
+        <form method="POST" action="/logout">
+        <input type="submit" value="Logout"></input></form>
+    </nav>
+    <div class="container">
+        <h1>Welcome, {{ user.username }}!</h1>
+        <!-- {{user.is_admin}} -->
+        
+        <p>Categories:</p>
+        <ul>
+            {% for category in categories %}
+            <form method="POST" action="/delete_category">
+            
+                <li>{{ category.category_name }}
+                <input type="hidden" name="user" value={{user.user_id}}>
+
+                <input type="hidden" name="uid" value={{category.category_id}}>
+                <input type="submit" value="Delete" style="margin: 5px 10px">
+            </form><form method="POST" action="/edit_category">
+            <input type="hidden" name="user" value={{user.user_id}}>
+                <input type="hidden" name="uid" value={{category.category_id}}>
+                <input type="submit" value="Edit" >
+                </form>
+            </li>
+            {% endfor %}
+        
+        </ul>
+
+        <p>Product:</p>
+        <ul>
+            {% for product in products %}
+            <form method="POST" action="/delete_product">
+                <li>{{ product.product_name }}    {{product.stock}}  {% for category in categories %}{% if category.category_id==product.category_id: %}
+                    {{category.category_name}}
+                    {% else %}
+                    <!--else block html code-->
+                    {% endif %}{% endfor %}
+                    <input type="hidden" name="user" value={{user.user_id}}>
+
+                    <input type="hidden" name="uid" value={{product.product_id}}>
+                    <input type="submit" value="Delete" style="margin: 5px 10px"></form>
+                    <button id="{{product.product_id}}" onclick="myFunction(this.id)">Edit</button>
+                    <form  id="imp" method="POST" action="/edit_product" hidden>
+                        <input  type="hidden" name="uid" value={{user.user_id}}>
+                        <input id="imp_feild" type="hidden" name="feild" value={{user.user_id}}>
+                        <input id="imp_value" type="hidden" name="value" value={{user.user_id}}>
+                            <input id="imp_uid" type="hidden" name="pid" value={{product.product_id}}>
+                            <input type="submit" value="Edit" >
+                            </form></li>
+            {% endfor %}
+        </ul>
+
+        <!-- Form for adding a new shopping list -->
+        <h2>Add a New Category</h2>
+        <form method="POST" action="/add_category_list">
+            <label for="list_name">Category List:</label>
+            <input type="text" id="list_name" name="list_name" required>
+            <input type="hidden" name="uid" value={{user.user_id}}>
+            <input type="submit" value="Add">
+        </form>
+        <p>---------------------------------------------------------------</p>
+        <h2>Add a New Product</h2>
+        <form method="POST" action="/add_product_list">
+            <label for="list_name">Product Name:</label>
+            <input type="text" id="list_name" name="list_name" required>
+            <label for="list_name">Product category:</label>
+            <select name="product" id="lang">
+                {% for category in categories %}
+                <option value="{{ category.category_name}}">{{ category.category_name }}</option>
+            {% endfor %}
+              </select>
+            <!-- <input type="text" id="list_name" name="list_name" required> -->
+            <input type="hidden" name="uid" value={{user.user_id}}>
+            <input type="submit" value="Add">
+        </form>
+    </div>
+    <script>
+        function myFunction(id) {
+            var feild=prompt("Please feild to edit", "name");
+            var newvalue=prompt("Please enter value", "pen");
+            document.getElementById("imp_uid").value=id
+            document.getElementById("imp_value").value=newvalue
+            document.getElementById("imp_feild").value=feild
+            document.getElementById("imp").submit();
+
+        //   confirm("Press a button!\nEither OK or Cancel.");
+        }
+        </script>
+</body>
+</html>

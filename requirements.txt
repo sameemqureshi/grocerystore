@@ -1,0 +1,6 @@
+flask
+flask-sqlalchemy
+werkzeug
+flask-restful
+flask-login
+matplotlib
